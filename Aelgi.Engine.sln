@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aelgi.Engine", "Aelgi.Engine\Aelgi.Engine.csproj", "{E0F1D7F6-5B63-444F-9363-9D491D007CA0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E0F1D7F6-5B63-444F-9363-9D491D007CA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0F1D7F6-5B63-444F-9363-9D491D007CA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0F1D7F6-5B63-444F-9363-9D491D007CA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0F1D7F6-5B63-444F-9363-9D491D007CA0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3432CB53-9333-4346-9239-A8A1CAE3ECDC}
+	EndGlobalSection
+EndGlobal
