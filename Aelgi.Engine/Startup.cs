@@ -19,6 +19,7 @@ namespace Aelgi.Engine
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddControllers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -41,6 +42,7 @@ namespace Aelgi.Engine
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

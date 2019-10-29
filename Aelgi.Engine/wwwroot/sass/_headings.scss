@@ -1,0 +1,10 @@
+﻿h1 {
+    position: relative;
+
+    &::before {
+        content: "#";
+        color: $primary;
+        position: absolute;
+        left: -30px;
+    }
+}
