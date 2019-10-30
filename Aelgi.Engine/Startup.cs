@@ -1,3 +1,4 @@
+using Aelgi.Engine.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +18,8 @@ namespace Aelgi.Engine
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IBlogService, BlogService>();
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddControllers();

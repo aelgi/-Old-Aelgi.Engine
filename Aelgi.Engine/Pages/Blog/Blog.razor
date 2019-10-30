@@ -1,0 +1,24 @@
+﻿@page "/blog/{name}"
+@layout BlogLayout
+@using Aelgi.Engine.Services
+@inject IBlogService BlogService
+
+<Card Title="More to come!">
+    @Content
+</Card>
+
+@code {
+    [Parameter]
+    public string Name { get; set; }
+
+    public string Title { get; set; }
+
+    public string Content { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = Name;
+        var content = await BlogService.LoadBlog(Name);
+        Content = content;
+    }
+}
