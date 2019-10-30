@@ -1,11 +1,12 @@
 ﻿.page {
     width: 100vw;
     min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .page.float-center {
-    display: flex;
-    flex-direction: column;
     justify-content: center;
     align-content: center;
     align-items: center;
@@ -14,5 +15,57 @@
 
     > div {
         max-width: 600px;
+    }
+}
+
+.container {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+header {
+    background-color: $black;
+    color: $white;
+    position: fixed;
+    position: sticky;
+
+    a {
+        color: $white;
+    }
+
+    > div {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-content: center;
+        justify-items: center;
+        align-items: center;
+
+        > div {
+            padding: 20px;
+            font-size: 1.4rem;
+        }
+    }
+}
+
+main {
+    padding: 20px;
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr 250px;
+    grid-gap: 20px;
+    justify-items: stretch;
+    align-items: start;
+    justify-content: stretch;
+    align-content: start;
+
+    > aside {
+        padding: 20px;
+        background-color: lighten($background, 30%);
+        border-radius: 5px;
+        border: 2px solid $black;
     }
 }

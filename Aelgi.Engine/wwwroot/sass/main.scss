@@ -4,6 +4,7 @@ html, body {
     margin: 0;
     border: 0;
     padding: 0;
+    background-color: $background;
 }
 
 * {
@@ -13,6 +14,7 @@ html, body {
 
 @import "_layout.scss";
 @import "_headings.scss";
+@import "_card.scss";
 
 a {
     color: $primary;

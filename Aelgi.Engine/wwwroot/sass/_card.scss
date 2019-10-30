@@ -1,0 +1,24 @@
+﻿.card {
+    padding: 20px;
+    width: 100%;
+    flex: 1;
+
+    background-color: lighten($background, 30%);
+    border-radius: 5px;
+    border: 2px solid $black;
+
+    > .title {
+        font-size: 1.4rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    > .subtitle {
+        font-size: 0.9rem;
+        font-style: italic;
+    }
+
+    > .content {
+        padding-top: 24px;
+    }
+}
