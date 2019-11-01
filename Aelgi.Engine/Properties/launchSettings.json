@@ -18,6 +18,7 @@
     "Aelgi.Engine": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "https://localhost:5001/blog/Aelgi",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

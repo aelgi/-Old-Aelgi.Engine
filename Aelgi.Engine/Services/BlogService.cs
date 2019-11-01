@@ -1,5 +1,5 @@
 ﻿using Aelgi.Engine.Renderers;
-using Markdig;
+using Aelgi.Markdown.IServices;
 using Microsoft.AspNetCore.Components;
 using System.IO;
 using System.Threading.Tasks;
@@ -13,24 +13,21 @@ namespace Aelgi.Engine.Services
 
     public class BlogService : IBlogService
     {
-        protected MarkdownPipeline _pipeline;
+        protected IParser _parser;
 
-        public BlogService()
+        public BlogService(IParser parser)
         {
-            _pipeline = new MarkdownPipelineBuilder()
-                .UseAdvancedExtensions()
-                .Build();
+            _parser = parser;
         }
 
         public async Task<RenderFragment> LoadBlog(string name)
         {
             var fullFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "blog", $"{name}.md");
             var data = await File.ReadAllTextAsync(fullFilePath);
-            var output = Markdown.Parse(data);
 
+            var doc = _parser.Parse(data);
             var renderer = new BlazorRenderer();
-            _pipeline.Setup(renderer);
-            var res = renderer.RenderFragment(output);
+            var res = renderer.Render(doc);
 
             return res;
         }

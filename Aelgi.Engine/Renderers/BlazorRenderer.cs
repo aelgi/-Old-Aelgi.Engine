@@ -1,42 +1,61 @@
-﻿using Aelgi.Engine.Renderers.Processors;
-using Markdig.Renderers;
-using Markdig.Syntax;
+﻿using Aelgi.Markdown.Services;
+using Aelgi.Markdown.Symbols;
 using Microsoft.AspNetCore.Components;
-using System.Collections.Generic;
 
 namespace Aelgi.Engine.Renderers
 {
-    public class BlazorRenderer : RendererBase
+    public class BlazorRenderer : BaseRenderer<RenderFragment, RenderFragment>
     {
-        protected List<RenderFragment> _frags = new List<RenderFragment>();
-
-        public BlazorRenderer() : base()
+        protected override RenderFragment CombineNodes()
         {
-            ObjectRenderers.Add(new HeadingRenderer());
-            ObjectRenderers.Add(new LiteralInlineRenderer());
-        }
-
-        public void AddFragment(RenderFragment f)
-        {
-            _frags.Add(f);
-        }
-
-        public override object Render(MarkdownObject markdownObject)
-        {
-            Write(markdownObject);
-
-            RenderFragment fragment = (builder) =>
+            return (builder) =>
             {
-                for (var i = 0; i < _frags.Count; i++)
-                    builder.AddContent(i, _frags[i]);
+                var i = 0;
+                foreach (var node in _nodes)
+                {
+                    builder.AddContent(i++, node);
+                }
             };
-
-            return fragment;
         }
 
-        public RenderFragment RenderFragment(MarkdownObject markdownObject)
+        protected override RenderFragment RenderHeading(HeadingSymbol s)
         {
-            return (RenderFragment)Render(markdownObject);
+            return (builder) =>
+            {
+                builder.OpenElement(0, $"h{s.Depth}");
+                builder.AddContent(1, s.Title.Content);
+                builder.CloseElement();
+            };
+        }
+
+        protected override RenderFragment RenderNewLine(NewLineSymbol s)
+        {
+            return (builder) =>
+            {
+                builder.AddMarkupContent(0, "<br />");
+            };
+        }
+
+        protected override RenderFragment RenderParagraph(ParagraphSymbol s)
+        {
+            return (builder) =>
+            {
+                var i = 0;
+                builder.OpenElement(i++, "p");
+
+                foreach (var el in s.Content)
+                    builder.AddContent(i++, ProcessLine(el));
+
+                builder.CloseElement();
+            };
+        }
+
+        protected override RenderFragment RenderPlainText(PlainTextSymbol s)
+        {
+            return (builder) =>
+            {
+                builder.AddContent(0, s.Content);
+            };
         }
     }
 }

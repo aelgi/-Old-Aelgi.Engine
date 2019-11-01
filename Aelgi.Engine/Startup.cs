@@ -1,4 +1,6 @@
 using Aelgi.Engine.Services;
+using Aelgi.Markdown.IServices;
+using Aelgi.Markdown.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +20,8 @@ namespace Aelgi.Engine
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IParser, Parser>();
+
             services.AddTransient<IBlogService, BlogService>();
 
             services.AddRazorPages();
