@@ -12,6 +12,8 @@ namespace Aelgi.Markdown.Services
         protected abstract U RenderNewLine(NewLineSymbol s);
 
         protected abstract U RenderParagraph(ParagraphSymbol s);
+        protected abstract U RenderBolded(BoldedSymbol s);
+        protected abstract U RenderItalics(ItalicsSymbol s);
         protected abstract U RenderPlainText(PlainTextSymbol s);
         protected abstract T CombineNodes();
 
@@ -21,6 +23,8 @@ namespace Aelgi.Markdown.Services
             if (line is NewLineSymbol) return RenderNewLine((NewLineSymbol)line);
             if (line is ParagraphSymbol) return RenderParagraph((ParagraphSymbol)line);
             if (line is PlainTextSymbol) return RenderPlainText((PlainTextSymbol)line);
+            if (line is BoldedSymbol) return RenderBolded((BoldedSymbol)line);
+            if (line is ItalicsSymbol) return RenderItalics((ItalicsSymbol)line);
 
             return default;
         }

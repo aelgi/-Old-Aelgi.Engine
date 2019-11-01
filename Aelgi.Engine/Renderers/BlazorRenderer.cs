@@ -50,6 +50,26 @@ namespace Aelgi.Engine.Renderers
             };
         }
 
+        protected override RenderFragment RenderBolded(BoldedSymbol s)
+        {
+            return (builder) =>
+            {
+                builder.OpenElement(0, "b");
+                builder.AddContent(1, s.Content);
+                builder.CloseElement();
+            };
+        }
+
+        protected override RenderFragment RenderItalics(ItalicsSymbol s)
+        {
+            return (builder) =>
+            {
+                builder.OpenElement(0, "i");
+                builder.AddContent(1, s.Content);
+                builder.CloseElement();
+            };
+        }
+
         protected override RenderFragment RenderPlainText(PlainTextSymbol s)
         {
             return (builder) =>

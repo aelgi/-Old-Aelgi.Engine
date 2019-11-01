@@ -1,10 +1,39 @@
-﻿h1 {
+﻿h1, h2, h3 {
     position: relative;
 
     &::before {
-        content: "#";
         color: $primary;
         position: absolute;
-        left: -30px;
+        left: -50px;
+        text-align: right;
+        width: 35px;
     }
+}
+
+h1 {
+    font-size: 1.6rem;
+
+    &::before {
+        content: "#";
+    }
+}
+
+h2 {
+    font-size: 1.4rem;
+
+    &::before {
+        content: "##";
+    }
+}
+
+h3 {
+    font-size: 1.2rem;
+
+    &::before {
+        content: "###";
+    }
+}
+
+h4, h5, h6 {
+    color: $primary;
 }

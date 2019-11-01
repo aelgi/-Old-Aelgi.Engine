@@ -20,7 +20,7 @@
         font-style: italic;
     }
 
-    > .content {
+    > .title ~ .content {
         padding-top: 24px;
     }
 }

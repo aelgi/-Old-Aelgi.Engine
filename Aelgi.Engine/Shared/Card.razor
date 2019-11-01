@@ -1,7 +1,18 @@
 ﻿<div class="card">
-    <h1 class="title">@Title</h1>
-    <div class="subtitle">@SubTitle</div>
-    <div class="content">@ChildContent</div>
+    @if (Title != null)
+    {
+        <h1 class="title">@Title</h1>
+    }
+
+    @if (SubTitle != null)
+    {
+        <div class="subtitle">@SubTitle</div>
+    }
+
+    @if (ChildContent != null)
+    {
+        <div class="content">@ChildContent</div>
+    }
 </div>
 
 @code {

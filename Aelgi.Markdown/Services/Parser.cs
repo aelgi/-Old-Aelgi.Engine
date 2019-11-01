@@ -52,7 +52,64 @@ namespace Aelgi.Markdown.Services
             var line = _lines.Dequeue();
 
             var content = new List<Symbol>();
-            content.Add(new PlainTextSymbol(line));
+
+            var isEscaped = false;
+            var currentGroup = "";
+            var isItalics = false;
+            var isBolded = false;
+            for (var i = 0; i < line.Length; i++)
+            {
+                if (isEscaped)
+                {
+                    isEscaped = false;
+                    continue;
+                }
+
+                if (line[i] == '\\')
+                {
+                    isEscaped = true;
+                    continue;
+                }
+
+                if (line[i] == '*')
+                {
+                    if ((i + 1) < line.Length && line[i + 1] == '*')
+                    {
+                        if (isBolded)
+                        {
+                            content.Add(new BoldedSymbol(currentGroup));
+                            currentGroup = "";
+                            isBolded = false;
+                        }
+                        else if (!isItalics)
+                        {
+                            content.Add(new PlainTextSymbol(currentGroup));
+                            currentGroup = "";
+                            isBolded = true;
+                        }
+                    }
+                    else
+                    {
+                        if (isItalics)
+                        {
+                            content.Add(new ItalicsSymbol(currentGroup));
+                            currentGroup = "";
+                            isItalics = false;
+                        }
+                        else if (!isBolded)
+                        {
+                            content.Add(new PlainTextSymbol(currentGroup));
+                            currentGroup = "";
+                            isItalics = true;
+                        }
+                    }
+                    continue;
+                }
+
+                currentGroup += line[i];
+            }
+
+            content.Add(new PlainTextSymbol(currentGroup));
 
             _symbols.Add(new ParagraphSymbol(content));
 
