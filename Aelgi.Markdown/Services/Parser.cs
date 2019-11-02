@@ -47,16 +47,22 @@ namespace Aelgi.Markdown.Services
             return false;
         }
 
+        public enum ParagraphState
+        {
+            None,
+            Bold,
+            Italics
+        }
+
         protected bool ProcessParagraph()
         {
             var line = _lines.Dequeue();
 
             var content = new List<Symbol>();
 
-            var isEscaped = false;
             var currentGroup = "";
-            var isItalics = false;
-            var isBolded = false;
+            var isEscaped = false;
+            var currentState = ParagraphState.None;
             for (var i = 0; i < line.Length; i++)
             {
                 if (isEscaped)
@@ -71,36 +77,37 @@ namespace Aelgi.Markdown.Services
                     continue;
                 }
 
-                if (line[i] == '*')
+                if (line[i] == '*' || line[i] == '_')
                 {
-                    if ((i + 1) < line.Length && line[i + 1] == '*')
+                    if ((i + 1) < line.Length && line[i + 1] == line[i])
                     {
-                        if (isBolded)
+                        i++;
+                        if (currentState == ParagraphState.Bold)
                         {
                             content.Add(new BoldedSymbol(currentGroup));
                             currentGroup = "";
-                            isBolded = false;
+                            currentState = ParagraphState.None;
                         }
-                        else if (!isItalics)
+                        else if (currentState == ParagraphState.None)
                         {
                             content.Add(new PlainTextSymbol(currentGroup));
                             currentGroup = "";
-                            isBolded = true;
+                            currentState = ParagraphState.Bold;
                         }
                     }
                     else
                     {
-                        if (isItalics)
+                        if (currentState == ParagraphState.Italics)
                         {
                             content.Add(new ItalicsSymbol(currentGroup));
                             currentGroup = "";
-                            isItalics = false;
+                            currentState = ParagraphState.None;
                         }
-                        else if (!isBolded)
+                        else if (currentState == ParagraphState.None)
                         {
                             content.Add(new PlainTextSymbol(currentGroup));
                             currentGroup = "";
-                            isItalics = true;
+                            currentState = ParagraphState.Italics;
                         }
                     }
                     continue;
