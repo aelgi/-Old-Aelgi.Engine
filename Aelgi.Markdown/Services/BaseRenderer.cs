@@ -15,16 +15,27 @@ namespace Aelgi.Markdown.Services
         protected abstract U RenderBolded(BoldedSymbol s);
         protected abstract U RenderItalics(ItalicsSymbol s);
         protected abstract U RenderPlainText(PlainTextSymbol s);
+        protected abstract U RenderUnordered(UnorderedListSymbol s);
+        protected abstract U RenderUnorderedItem(UnorderedListItemSymbol s);
+        protected abstract U RenderOrdered(OrderedListSymbol s);
+        protected abstract U RenderOrderedItem(OrderedListItemSymbol s);
         protected abstract T CombineNodes();
 
         protected U ProcessLine(Symbol line)
         {
             if (line is HeadingSymbol) return RenderHeading((HeadingSymbol)line);
+
             if (line is NewLineSymbol) return RenderNewLine((NewLineSymbol)line);
+
             if (line is ParagraphSymbol) return RenderParagraph((ParagraphSymbol)line);
             if (line is PlainTextSymbol) return RenderPlainText((PlainTextSymbol)line);
             if (line is BoldedSymbol) return RenderBolded((BoldedSymbol)line);
             if (line is ItalicsSymbol) return RenderItalics((ItalicsSymbol)line);
+
+            if (line is UnorderedListSymbol) return RenderUnordered((UnorderedListSymbol)line);
+            if (line is UnorderedListItemSymbol) return RenderUnorderedItem((UnorderedListItemSymbol)line);
+            if (line is OrderedListSymbol) return RenderOrdered((OrderedListSymbol)line);
+            if (line is OrderedListItemSymbol) return RenderOrderedItem((OrderedListItemSymbol)line);
 
             return default;
         }

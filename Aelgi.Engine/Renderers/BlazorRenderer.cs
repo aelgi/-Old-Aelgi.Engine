@@ -77,5 +77,53 @@ namespace Aelgi.Engine.Renderers
                 builder.AddContent(0, s.Content);
             };
         }
+
+        protected override RenderFragment RenderUnordered(UnorderedListSymbol s)
+        {
+            return (builder) =>
+            {
+                var i = 0;
+                builder.OpenElement(i++, "ul");
+                foreach (var el in s.Items)
+                    builder.AddContent(i++, ProcessLine(el));
+                builder.CloseElement();
+            };
+        }
+
+        protected override RenderFragment RenderUnorderedItem(UnorderedListItemSymbol s)
+        {
+            return (builder) =>
+            {
+                var i = 0;
+                builder.OpenElement(i++, "li");
+                foreach (var el in s.Content)
+                    builder.AddContent(i++, ProcessLine(el));
+                builder.CloseElement();
+            };
+        }
+
+        protected override RenderFragment RenderOrdered(OrderedListSymbol s)
+        {
+            return (builder) =>
+            {
+                var i = 0;
+                builder.OpenElement(i++, "ol");
+                foreach (var el in s.Items)
+                    builder.AddContent(i++, ProcessLine(el));
+                builder.CloseElement();
+            };
+        }
+
+        protected override RenderFragment RenderOrderedItem(OrderedListItemSymbol s)
+        {
+            return (builder) =>
+            {
+                var i = 0;
+                builder.OpenElement(i++, "li");
+                foreach (var el in s.Content)
+                    builder.AddContent(i++, ProcessLine(el));
+                builder.CloseElement();
+            };
+        }
     }
 }

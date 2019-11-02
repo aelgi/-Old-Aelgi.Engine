@@ -1,5 +1,6 @@
 ﻿using Aelgi.Markdown.IServices;
 using Aelgi.Markdown.Symbols;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -54,10 +55,8 @@ namespace Aelgi.Markdown.Services
             Italics
         }
 
-        protected bool ProcessParagraph()
+        protected ICollection<Symbol> ParseTextContent(string line)
         {
-            var line = _lines.Dequeue();
-
             var content = new List<Symbol>();
 
             var currentGroup = "";
@@ -116,11 +115,80 @@ namespace Aelgi.Markdown.Services
                 currentGroup += line[i];
             }
 
-            content.Add(new PlainTextSymbol(currentGroup));
+            if (currentGroup.Length > 0)
+                content.Add(new PlainTextSymbol(currentGroup));
+            return content;
+        }
 
-            _symbols.Add(new ParagraphSymbol(content));
+        protected bool ProcessParagraph()
+        {
+            var line = _lines.Dequeue();
+
+            _symbols.Add(new ParagraphSymbol(ParseTextContent(line)));
 
             return true;
+        }
+
+        protected bool ProcessUnorderedList()
+        {
+            var line = _lines.Peek();
+            var match = false;
+
+            var items = new List<Symbol>();
+
+            while (line.StartsWith("-") || line.StartsWith("+") || line.StartsWith("*"))
+            {
+                var spacePos = line.IndexOf(' ');
+                var text = line.Substring(spacePos).Trim();
+                items.Add(new UnorderedListItemSymbol(ParseTextContent(text)));
+
+                _lines.Dequeue();
+                match = true;
+                line = _lines.Peek();
+            }
+
+            if (items.Count() > 0)
+                _symbols.Add(new UnorderedListSymbol(items));
+
+            return match;
+        }
+
+        protected bool ProcessOrderedList()
+        {
+            var line = _lines.Peek();
+            var match = false;
+
+            var items = new List<Symbol>();
+
+            while (true)
+            {
+                var charLength = -1;
+                for (var i = 0; i < line.Length; i++)
+                    if (!Char.IsDigit(line[i]))
+                    {
+                        charLength = i;
+                        break;
+                    }
+
+                if (charLength > 0 && charLength < line.Length && line[charLength + 1] == '.')
+                {
+                    var subset = line.Substring(charLength + 1).Trim();
+                    items.Add(new OrderedListItemSymbol(ParseTextContent(subset)));
+
+                    match = true;
+                    _lines.Dequeue();
+                    line = _lines.Peek();
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if (items.Count() > 0)
+                _symbols.Add(new OrderedListSymbol(items));
+
+            return match;
         }
 
         protected void ProcessLines()
@@ -128,8 +196,10 @@ namespace Aelgi.Markdown.Services
             if (ProcessHeading()) return;
 
             if (ProcessNewLine()) return;
-            if (ProcessParagraph()) return;
+            if (ProcessUnorderedList()) return;
+            if (ProcessOrderedList()) return;
 
+            if (ProcessParagraph()) return;
             // Unsupported line, I need to report this somehow
             _lines.Dequeue();
         }
