@@ -52,7 +52,9 @@ namespace Aelgi.Markdown.Services
         {
             None,
             Bold,
-            Italics
+            Italics,
+            LinkContent,
+            LinkLink
         }
 
         protected ICollection<Symbol> ParseTextContent(string line)
@@ -62,11 +64,14 @@ namespace Aelgi.Markdown.Services
             var currentGroup = "";
             var isEscaped = false;
             var currentState = ParagraphState.None;
+            var lastState = currentState;
+            var linkName = "";
             for (var i = 0; i < line.Length; i++)
             {
                 if (isEscaped)
                 {
                     isEscaped = false;
+                    currentGroup += line[i];
                     continue;
                 }
 
@@ -74,6 +79,39 @@ namespace Aelgi.Markdown.Services
                 {
                     isEscaped = true;
                     continue;
+                }
+
+                if (line[i] == '[')
+                {
+                    lastState = currentState;
+                    switch (currentState)
+                    {
+                        case ParagraphState.None:
+                            content.Add(new PlainTextSymbol(currentGroup));
+                            break;
+                        case ParagraphState.Bold:
+                            content.Add(new BoldedSymbol(currentGroup));
+                            break;
+                        case ParagraphState.Italics:
+                            content.Add(new ItalicsSymbol(currentGroup));
+                            break;
+                    }
+                    currentGroup = "";
+                    currentState = ParagraphState.LinkContent;
+                }
+
+                if (line[i] == ']' && line[i + 1] == '(' && currentState == ParagraphState.LinkContent)
+                {
+                    linkName = currentGroup;
+                    currentGroup = "";
+                    currentState = ParagraphState.LinkLink;
+                }
+
+                if (line[i] == ')' && currentState == ParagraphState.LinkLink)
+                {
+                    currentState = lastState;
+                    _symbols.Add(new LinkSymbol(currentGroup, linkName));
+                    currentGroup = "";
                 }
 
                 if (line[i] == '*' || line[i] == '_')

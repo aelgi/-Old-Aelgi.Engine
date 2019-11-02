@@ -133,5 +133,16 @@ namespace Aelgi.Engine.Renderers
                 builder.AddMarkupContent(0, "<hr />");
             };
         }
+
+        protected override RenderFragment RenderLink(LinkSymbol s)
+        {
+            return (builder) =>
+            {
+                builder.OpenElement(0, "i");
+                builder.AddAttribute(1, "href", s.Location);
+                builder.AddContent(2, s.Title);
+                builder.CloseElement();
+            };
+        }
     }
 }
