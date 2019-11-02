@@ -1,8 +1,8 @@
-﻿using Aelgi.Markdown.IServices;
-using Aelgi.Markdown.Symbols;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Aelgi.Markdown.IServices;
+using Aelgi.Markdown.Symbols;
 
 namespace Aelgi.Markdown.Services
 {
@@ -191,11 +191,27 @@ namespace Aelgi.Markdown.Services
             return match;
         }
 
+        protected bool ProcessPageBreak()
+        {
+            var line = _lines.Peek().Trim();
+
+            if (line.StartsWith("___") || line.StartsWith("***") || line.StartsWith("---"))
+            {
+                _symbols.Add(new PageBreakSymbol());
+                _lines.Dequeue();
+                return true;
+            }
+
+            return false;
+        }
+
         protected void ProcessLines()
         {
             if (ProcessHeading()) return;
 
             if (ProcessNewLine()) return;
+            if (ProcessPageBreak()) return;
+
             if (ProcessUnorderedList()) return;
             if (ProcessOrderedList()) return;
 

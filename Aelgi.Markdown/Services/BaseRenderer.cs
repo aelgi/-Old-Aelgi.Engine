@@ -19,6 +19,7 @@ namespace Aelgi.Markdown.Services
         protected abstract U RenderUnorderedItem(UnorderedListItemSymbol s);
         protected abstract U RenderOrdered(OrderedListSymbol s);
         protected abstract U RenderOrderedItem(OrderedListItemSymbol s);
+        protected abstract U RenderPageBreak(PageBreakSymbol s);
         protected abstract T CombineNodes();
 
         protected U ProcessLine(Symbol line)
@@ -31,6 +32,8 @@ namespace Aelgi.Markdown.Services
             if (line is PlainTextSymbol) return RenderPlainText((PlainTextSymbol)line);
             if (line is BoldedSymbol) return RenderBolded((BoldedSymbol)line);
             if (line is ItalicsSymbol) return RenderItalics((ItalicsSymbol)line);
+
+            if (line is PageBreakSymbol) return RenderPageBreak((PageBreakSymbol)line);
 
             if (line is UnorderedListSymbol) return RenderUnordered((UnorderedListSymbol)line);
             if (line is UnorderedListItemSymbol) return RenderUnorderedItem((UnorderedListItemSymbol)line);

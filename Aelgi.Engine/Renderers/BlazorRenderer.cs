@@ -125,5 +125,13 @@ namespace Aelgi.Engine.Renderers
                 builder.CloseElement();
             };
         }
+
+        protected override RenderFragment RenderPageBreak(PageBreakSymbol s)
+        {
+            return (builder) =>
+            {
+                builder.AddMarkupContent(0, "<hr />");
+            };
+        }
     }
 }
